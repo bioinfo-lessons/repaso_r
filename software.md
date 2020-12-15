@@ -6,7 +6,7 @@ the directory where you want to clone the repo. It does not matter where, as lon
 have full permissions. If you are unsure, choose your home directory.
 
 ````
-git clone --branch master https://github.com/SGMartin/repaso_master_bioinfo/
+git clone --branch master https://gitlab.com/bioinfo-lessons/repaso_r
 ````
 
 ## Install the software
