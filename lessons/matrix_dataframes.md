@@ -5,7 +5,7 @@ For the purposes of this lesson, we are not talking about R tables here, which a
 ## Matrix vs data frame
 | Matrix | Data frame |
 |:-:|:-:|
-|Two dimensional, rectangular array| Multiple data types in multiple columns (fields)|
+|Two dimensional, rectangular array | Multiple data types in multiple columns (fields)|
 | Fixed rows and columns | Variable number of rows and columns |
 | Column-wise, all ements must be of the same data type | Data can be numeric, character or factor |
 | Homogeneous | Heterogeneous |
@@ -14,60 +14,6 @@ For the purposes of this lesson, we are not talking about R tables here, which a
 | Tuned up for linear algebra | General purpose data bases |
 
 As a curiosity: a lot of R functions on data frames will coerce them to matrix internally as one of the first steps. 
-
-## Coercing a data frame to matrix and the other way around
-
-Coercing a matrix to data frame is straightforward due to data frames being heterogeneous and flexible. To do so, the appropiate function in base R is:
-
-````
-as.data.frame(matrix)
-````
-
-However, the other way around is not that simple. Create a simple data frame by typing:
-````
-a <- c('alphabet'=c('alpha', 'beta', 'gamma'), 'arabic'=c(1,2,3))
-
-# Visualize it:
-a
-````
-Our dataframe is now ready. It has two columns called _alphabet_ and _arabic_. If you type:
-
-````
-class(a$alphabet)
-class(a$arabic)
-````
-_alphabet_ is a column composed of _factors_ while _arabic_ is a **numeric class** vector.
-
-Before trying to coerce this data frame to a matrix, think for a moment about the differences we talked about earlier, then try to answer the following questions:
-
-1. Can we directly convert _a_ to a matrix? Why?
-1. Is there any transformation we could apply before coercing? Which one? Why?
-
-Actually, R will coerce this data frame to a matrix without any warning or system message. Let's try it:
-
-````
-b <- as.matrix(a)
-````
-Examine this matrix carefully. Do you spot what happened? You can also type:
-
-````
-class(b[,'alphabet'])
-class(b[,'arabic'])
-````
-These two lines select all rows from each of the columns and then feed the result to the _class_ function. Indeed, our data frame is now a matrix. However, R has coerced our numeric column to a character vector first. Remember that **matrices are homogeneous**, they cannot store mixed data types. 
-R silently converted our of our columns to a common data type (in this case, **characters**) before coercing.
-
-Moreover, let's see what happens If we attempt to append another column to our newly created matrix:
-
-````
-c <- cbind(b,'more_numbers'=c(4,5,6))
-c
-````
-Here we are **binding a column** (cbind) to our matrix. _more_numbers_ is a **named vector** of equal length, but all of its values are **numeric**. What happened? R successfully appended a column, returning a **new** (remember, matrices have fixed dimensions) matrix with a third column. However,
-our new column has been coerced to... you guessed it: **character**.
-
-## Is there any way to predict how R will coerce our columns? 
-As by the docs, ```as.matrix()``` returns a character matrix ff there are only atomic columns and any non-(numeric/logical/complex) column. Factors are coerced using ```as.vector()``` and format is used for the rest of non-character columns. Otherwise, R follows a   **coercion hierarchy**, more precisely: complex > double > integer > logical. I.E: all-logical data frames are coerced to all logical matrices, but a mixed logical-integer data frame is coerced to an integer matrix.
 
 
 ## Matrix operations
@@ -186,3 +132,58 @@ bioinformatics_students[,'background']
 ## Or by index
 bioinformatics_students[,1]
 ````
+
+## Coercing a data frame to matrix and the other way around
+
+Coercing a matrix to data frame is straightforward due to data frames being heterogeneous and flexible. To do so, the appropiate function in base R is:
+
+````
+as.data.frame(matrix)
+````
+
+However, the other way around is not that simple. Create a simple data frame by typing:
+````
+a <- c('alphabet'=c('alpha', 'beta', 'gamma'), 'arabic'=c(1,2,3))
+
+# Visualize it:
+a
+````
+Our dataframe is now ready. It has two columns called _alphabet_ and _arabic_. If you type:
+
+````
+class(a$alphabet)
+class(a$arabic)
+````
+_alphabet_ is a column composed of _factors_ while _arabic_ is a **numeric class** vector.
+
+Before trying to coerce this data frame to a matrix, think for a moment about the differences we talked about earlier, then try to answer the following questions:
+
+1. Can we directly convert _a_ to a matrix? Why?
+1. Is there any transformation we could apply before coercing? Which one? Why?
+
+Actually, R will coerce this data frame to a matrix without any warning or system message. Let's try it:
+
+````
+b <- as.matrix(a)
+````
+Examine this matrix carefully. Do you spot what happened? You can also type:
+
+````
+class(b[,'alphabet'])
+class(b[,'arabic'])
+````
+These two lines select all rows from each of the columns and then feed the result to the _class_ function. Indeed, our data frame is now a matrix. However, R has coerced our numeric column to a character vector first. Remember that **matrices are homogeneous**, they cannot store mixed data types. 
+R silently converted our of our columns to a common data type (in this case, **characters**) before coercing.
+
+Moreover, let's see what happens If we attempt to append another column to our newly created matrix:
+
+````
+c <- cbind(b,'more_numbers'=c(4,5,6))
+c
+````
+Here we are **binding a column** (cbind) to our matrix. _more_numbers_ is a **named vector** of equal length, but all of its values are **numeric**. What happened? R successfully appended a column, returning a **new** (remember, matrices have fixed dimensions) matrix with a third column. However,
+our new column has been coerced to... you guessed it: **character**.
+
+## Is there any way to predict how R will coerce our columns? 
+As by the docs, ```as.matrix()``` returns a character matrix ff there are only atomic columns and any non-(numeric/logical/complex) column. Factors are coerced using ```as.vector()``` and format is used for the rest of non-character columns. Otherwise, R follows a   **coercion hierarchy**, more precisely: complex > double > integer > logical. I.E: all-logical data frames are coerced to all logical matrices, but a mixed logical-integer data frame is coerced to an integer matrix.
+
