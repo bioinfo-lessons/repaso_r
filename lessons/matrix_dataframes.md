@@ -1,10 +1,10 @@
 # Working with tables in R
 
-For the purposes of this lesson, we are not talking about R tables here, which are more specific to the statistic concept of contingency table. Tabular data is usually handled as data frames and matrices. In Bioinformatics, one of the most characteristic matrix is the **count matrix**, which stores geneXsample counts from an RNA-Seq experiment. Similarly, one of the most common data frame you will work with is the experiment data associated with a count matrix. It keep vital information about an experiment such as which samples belong to which experimental group our how each sample as processed.
+For the purposes of this lesson, we are not talking about R tables here, which are more specific to the statistic concept of contingency table. Tabular data is usually handled as data frames and matrices. In Bioinformatics, one of the most characteristic matrix is the **count matrix**, which stores geneXsample counts from an RNA-Seq experiment. Similarly, one of the most common data frame you will work with is the experiment data associated with a count matrix. It keeps vital information about an experiment such as which samples belong to which experimental group our how each sample as processed.
 
-## Matrix vs Data frame
+## Matrix vs data frame
 | Matrix | Data frame |
-|:--------:|:-----------:|
+|:-:|:-:|
 |Two dimensional, rectangular array| Multiple data types in multiple columns (fields)|
 | Fixed rows and columns | Variable number of rows and columns |
 | Column-wise, all ements must be of the same data type | Data can be numeric, character or factor |
