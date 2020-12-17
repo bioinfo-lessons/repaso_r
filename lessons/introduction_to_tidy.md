@@ -1,6 +1,9 @@
 # Introduction to the tidyverse
 
-Base R' implementation of data frames and matrix provides us with a limited set of tools to work with tabular data. a lot of real world problems involving data frames and matrices are cumbersome to solve without some additional packages.
+Base R's implementation of data frames and matrices provides us with a limited set of tools to work with tabular data. A lot of real world problems involving data frames and matrices are cumbersome to solve without some additional packages. In this lesson, we are going to familiarize ourselves with the collection of libraries which compose the _tidyverse_.
+
+## The purpose of the tidyverse
+The _tidyverse_ is a collection of R libraries for data science. They share a common grammar, structure and design philosophy.  Moreover, they greatly simplify problems that are difficult to tackle in base R. 
 
 Consider the following table: 
 
@@ -10,10 +13,7 @@ Consider the following table:
 | Marta | Computer_science-Math-Biology|
 
 Our first column is composed of student names. Each cell represents a unique observation. However, the column **courses** contains multiple courses
-separated by '-'. Moreover, we also have '_' as a substitute for whitespaces. We are looking at what we call **untidy** data. We could tidy this column in base R, but it we would have to write quite a bit of commands. In this lesson, we are going to harness the power of the _tidyverse_ to allow us to solve this problem and many more effortlessly. 
-
-## The purpose of the tidyverse
-The _tidyverse_ is a collection of R libraries for data science. They share a common grammar, structure and design philosophy.  Moreover, they greatly simplify problems that are difficult to tackle in base R. For instance, the above table could be _tidied up_ using two functions only. 
+separated by '-'. Moreover, we also have '_' as a substitute for whitespaces. We are looking at what we call **untidy** data. We could tidy this column in base R, but it we would have to write quite a bit of commands. On the other hand, the above table can be _tidied up_ with just two functions from the _tidyverse_.
 
 ## Tidy vs untidy data
 

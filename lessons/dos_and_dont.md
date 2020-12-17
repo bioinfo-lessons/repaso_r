@@ -13,6 +13,7 @@ your project structure.
 
 ### DO NOT
 1. Recycle conda environments between projects to save disk space. As library requirements pile up, the chances of your installation breaking increase too. Moreover, conda is very smart about dependency management, it won't download the same file twice unless it is needed.
+1. 
 
 ## Working with R
 
