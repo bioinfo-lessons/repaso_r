@@ -56,7 +56,7 @@ gather() takes multiple columns, and gathers them into key-value pairs: it makes
 
 ## Separating columns
 
-Now we are ready to the example we reviewed at the beginning of this lesson.
+Now we are ready to tackle the example we reviewed at the beginning of this lesson.
 ````
 today_courses <- data.frame('student'=c('Pedro','Marta'), 'subjects'=c('Math-English-French', 'Computer_science-Math-Biology'))
 ```` 
@@ -89,7 +89,7 @@ Here we are using _gsub_, to replace a **pattern** with a **replacement** string
 The _tidyverse_ includes libraries ranging from reading data from files to plotting beautiful graphics with _ggplot2_. We are going to delve into
 the collection using public somatic alterations data from The Cancer Genome Atlas (TCGA).  More precisely, we are going to work with _uterine carcinosarcoma_ samples. Navigate to the _examples_ directory in this repository and unzip the contests of *table_examples.zip* there. 
 
-Before firing up R, we are going to take a peek at our table:
+Before parsing it in R, we are going to take a peek at our table with **bash**:
 ````
 head TCGA.UCEC.maf -n 10
 ````
@@ -101,14 +101,7 @@ Try to answer the following questions:
 1. What does the line before the column names represent?
 
 
-Now, we are ready to start our analysis in R. Open Rstudio, create a new script and load the whole tidyverse. Change the working directory to where you have stored our mock table.
-
-````
-library('tidyverse')
-setwd('<your_repo_copy>/examples')
-````
-
-Instead of the base R function ````read.csv```` we are going to start using the _tidyverse_ right away. The library _readr_ (**R**ead **r**ectangular) posess various data parsers with are considerably faster and more flexible. 
+Now, we are ready to start our analysis in R. Instead of the base R function ````read.csv```` we are going to start using the _tidyverse_ right away. The library _readr_ (**R**ead **r**ectangular) posess various data parsers with are considerably faster and more flexible. 
 
 ## Exercise 1: parsing the table
 Load the data so that you get a data frame of **120** columns. The first one should be called **Hugo_Symbol**. To guide you through all the functions available in _readr_, remember the questions we previously answered about the data. Take into account that the **C** in **CSV** stands for **comma**. Which separator does our file use? Do not hesitate yo use the library's documentation. Get yourself accustomed to reading and understanding your functions. It will save you thousands of Google queries.
