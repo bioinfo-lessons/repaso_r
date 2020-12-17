@@ -256,5 +256,5 @@ This student background is: computational
 1. All types of data are treated as objects in R.
 1. S3 objects use the operator ````$```` to access their attributes.
 1. S4 objects use the ````@```` to retrieve their slots.
-1. S3 objects are more flexible, but you may break them inadverterly.
+1. S3 objects are more flexible, but you may break them inadvertedly.
 1. S4 objects are formal, more robust, but are more strict in terms of manipulating them.
