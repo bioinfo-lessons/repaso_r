@@ -80,7 +80,7 @@ You surely agree with me that *subject_1* does not  clearly represent subjects o
 today_courses$order <- gsub(pattern='subject_', replacement='', fixed=TRUE, x=today_courses$order)
 ````
 
-Here we are using _gsub_, to replace a **pattern** with a **replacement** string. In our case, *subject_* is replaced with an empty character. ````fixed=TRUE```` tells ````gsub```` to match the string **as is** instead of considering it a **regular expression**. There are multiples ways to achieve the same results, but I find _gsub_ to be fast and comfortable for this task.
+Here we are using _gsub_, to replace a **pattern** with a **replacement** string. In our case, *subject_* is replaced with an empty character. ````fixed=TRUE```` tells ````gsub```` to match the string **as is** instead of considering it a **regular expression**. There are multiples ways to achieve the same results, but I find ````gsub```` to be fast and comfortable for this task.
 
 
 ## Diving into the tidyverse
@@ -132,7 +132,7 @@ reptile_animals <- animals %in% reptiles
 will return **a boolean** vector of length 3, which is the same as animals. The first value will be **TRUE** if the first value in **animals** appears in reptiles. Otherwise, it will be **FALSE**.
 
 ## Filtering, the tidy way
-We have filtered our data using base R. Now, we are going to perform the same filtering step using _dplyr_ a powerful library of the _tidyverse._ The best way to understand _dplyr_ is to look at how our filtering would look like with _dplyr_.
+We have filtered our data using base R. Now, we are going to perform the same filtering step using _dplyr_, a powerful library of the _tidyverse._ The best way to understand _dplyr_ is to look at how our filtering would look like with _dplyr_.
 
 ````
 non_relevant <- c('Silent', 'Intron', "5'Flank", "3'UTR", "5'UTR")
@@ -155,7 +155,7 @@ Here we are defining a vector of values from the column *Variant_Classification*
 ucec <- ucec %>%
 ````
 
-Here we are assigning **ucec** to **ucec**... or are we? Look at `%>%'. It is _dplyr's pipe operator_. For those unfamiliar with Unix's pipes, this expression tells R that the next function will be applied to our **ucec** data frame. When using _dplyr_ pipes, make sure to **always** start a new line **after** the operator. RStudio should be smart enough to indent the line for you. 
+Here we are assigning **ucec** to **ucec**... or are we? Look at ````%>%````. It is _dplyr's pipe operator_. For those unfamiliar with Unix's pipes, this expression tells R that the next function will be applied to our **ucec** data frame. When using _dplyr_ pipes, make sure to **always** start a new line **after** the operator. RStudio should be smart enough to indent the line for you. 
 
 ````
 filter(!Variant_Classification %in% non_relevant)
