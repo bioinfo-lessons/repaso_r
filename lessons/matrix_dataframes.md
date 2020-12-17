@@ -1,19 +1,18 @@
 # Working with tables in R
 
-For the purposes of this lesson, we are not talking about R tables here, which are more specific to the statistic concept of contingency table. Tabular data is usually handled as data frames and matrices. In Bioinformatics, one of the most characteristic matrix is the **count matrix**, which stores geneXsample counts from an RNA-Seq experiment. Similarly, one of the most common data frame you will work with is the experiment data associated with a count matrix. It keeps vital information about an experiment such as which samples belong to which experimental group our how each sample as processed.
+For the purposes of this lesson, we are not talking about R tables here, which are more specific to the statistic concept of contingency table. Tabular data is usually handled as data frames and matrices. For instance, one of the most characteristic bioinformatics matrix is the **count matrix**, which stores geneXsample counts from an RNA-Seq experiment. Similarly, one of the most common data frame you will work with is the experiment data associated with a count matrix. It keeps vital information about an experiment such as which samples belong to which experimental group our how each sample as processed. Both are used together in DEG (**D**ifferential **G**ene **E**xpression) which you will be reviewing soon.
 
 ## Matrix vs data frame
 | Matrix | Data frame |
 |:-:|:-:|
 |Two dimensional, rectangular array | Multiple data types in multiple columns (fields)|
-| Fixed rows and columns | Variable number of rows and columns |
 | Column-wise, all ements must be of the same data type | Data can be numeric, character or factor |
 | Homogeneous | Heterogeneous |
-| Generalized as m*n array | Generalized as a list of vectors of equal length | 
-| Memory efficient | Heavy on memory |
-| Tuned up for linear algebra | General purpose data bases |
+| Built as an m*n array | Built as a list of vectors of equal length | 
+| Memory efficient | Heavy on memory, not that important with modern computers |
+| Tuned up for linear algebra | Used as a general purpose tabular database |
 
-As a curiosity: a lot of R functions on data frames will coerce them to matrix internally as one of the first steps. 
+As a curiosity: a lot of R functions on data frames will first coerce them to matrix.
 
 
 ## Matrix operations
@@ -23,7 +22,7 @@ Remember that in R, matrices are represented by: matrix[rows, columns]. Most of 
 ````
 m <- matrix(1:80, nrow=8, ncol=10, byrow=TRUE)
 ````
-Our matrix will have 8 rows, 10 columns and their values will range from 1 to 80. The last argument tells R to fill the values row wise. If you are in doubt, change it to ````FALSE```` and see what happens :)
+Our matrix will have 8 rows, 10 columns and their values will range from 1 to 80. The last argument tells R to fill the values row wise. If you are in doubt, change it to ````FALSE```` and see what happens.
 
 ### Retrieving rows an columns by their index
 
@@ -112,6 +111,16 @@ Try to reason the following questions:
 1. Would the following operation fail? ````m[greater_than_11,]````Why?
 1. How would you retrieve all cells of the first column whose values are greater than 20?
 
+## Appending rows or columns
+To add a new row to a matrix, type:
+
+````
+m <- rbind(m, 81:89)
+````
+````rbind```` returns a new matrix with a new row, whose values range from 81 to 89. We then assign the result back to m.
+
+To append a new **column** instead, use ```cbind```
+
 
 ## Subsetting in data frames
 It is actually the same! There are no differences between data frames and matrices when it comes to subsetting. However, data frames do have an additional operator to select columns. We will review it now. Let's start by creating a new data frame:
@@ -132,6 +141,46 @@ bioinformatics_students[,'background']
 ## Or by index
 bioinformatics_students[,1]
 ````
+
+## Adding new rows and columns in a data frame
+
+A data frame in R is essentially a list of vectors of equal length. To append a new column, you can either:
+
+````
+bioinformatics_students[, 'grades'] <- c(8,9,10)
+````
+
+or 
+
+````
+bioinformatics_students$grades <- c(8,9,10)
+````
+
+However, what happens If our new column is **shorter** than the rest? Try to append a vector of length 1 by typing:
+
+````
+bioinformatics_students[,'grade_threshold'] <- 5
+````
+
+**What have just happened? Why?** To answer this question, try the following:
+
+````
+bioinformatics_students[,'previous_salary'] <- c(25000,0)
+````
+It seems that R does not allow us to append our new colums, as it is one element shorter than the rest of them.
+
+However, If we add another student like this:
+
+````
+bioinformatics_students[4,] <- c('computational', 'Ana', 10, 5)
+````
+
+and then try again to append our *previous_salary*:
+
+````
+bioinformatics_students[,'previous_salary'] <- c(25000,0)
+````
+**It does work! Why?** Think about it for a minute and try to answer it on your own. They keyword here is **recycling**.
 
 ## Coercing a data frame to matrix and the other way around
 
