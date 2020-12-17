@@ -167,7 +167,7 @@ bioinformatics_students[,'grade_threshold'] <- 5
 ````
 bioinformatics_students[,'previous_salary'] <- c(25000,0)
 ````
-It seems that R does not allow us to append our new colums, as it is one element shorter than the rest of them.
+It seems that R does not allow us to append our new column, as it is one element shorter than the rest of them.
 
 However, If we add another student like this:
 
