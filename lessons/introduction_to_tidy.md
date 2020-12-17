@@ -1,6 +1,6 @@
 # Introduction to the tidyverse
 
-Base R' implementation of data frames and matrix provides us with a barebones set of tools to work with tabular data. However,a lot of real world problems involving data frames and matrices are cumbersome to solve without some additional packages.
+Base R' implementation of data frames and matrix provides us with a limited set of tools to work with tabular data. a lot of real world problems involving data frames and matrices are cumbersome to solve without some additional packages.
 
 Consider the following table: 
 
@@ -16,6 +16,72 @@ separated by '-'. Moreover, we also have '_' as a substitute for whitespaces. We
 The _tidyverse_ is a collection of R libraries for data science. They share a common grammar, structure and design philosophy.  Moreover, they greatly simplify problems that are difficult to tackle in base R. For instance, the above table could be _tidied up_ using two functions only. 
 
 ## Tidy vs untidy data
+
+Bioinformaticians and data scientists expend a significant amount of time working on raw data to prepare it for the actual analysis. Often, we receive experimental data gathered in an _excel_ file or as dump from some kind of database. Common flaws in this kind of data are:
+
+* Column headers as values
+* Multiple variables stored in a single column
+* Variables spread across rows and columns
+
+The concepts behind tidy data were described in “Tidy Data” by Hadley Wickham.[1] He describes three fundamental attributes of tidy data:
+
+1. Each variable forms a column
+2. Each observation forms a row
+3. Each type of observational unit forms a table
+
+
+## Hands-On: An untidy example
+
+Create the following data frame:
+````
+messy <- data.frame(
+  name = c("Sandra", "Alfredo", "Laura"),
+  a = c(63, 78, 64),
+  b = c(56, 90, 50)
+)
+````
+This data frame represents the heartrate of three different patients while treated with two drugs: a and b. Before fixing it, **think about why it is broken.** Try to remember the key concepts of clean data and apply them to this data frame.
+
+The first _tidy_ function we are going to learn today is ````gather````, from the _tidy_ package. 
+
+````
+fixed <- gather(messy, 'drug', 'heartrate', a:b)
+````
+Note that I am not quoting the column names of *messy* here. 
+
+**What does ````gather()```` do?**
+
+gather() takes multiple columns, and gathers them into key-value pairs: it makes “wide” data longer. Another alternative for ````gather```` is ````melt```` from the library _reshape2_. This transformation is also called _pivot_ (spreadsheets) and _fold_ (databases). 
+
+
+## Separating columns
+
+Now we are ready to the example we reviewed at the beginning of this lesson.
+````
+today_courses <- data.frame('student'=c('Pedro','Marta'), 'subjects'=c('Math-English-French', 'Computer_science-Math-Biology'))
+```` 
+We have two students, each with 3 subjects. The order of the subjects is important, so we have to preserve it somehow while cleaning our data. 
+First, we are going to separate our _subjects_ column into three distinct columns.
+
+````
+today_courses <- separate(today_courses, col=subjects, sep='-', into=c('subject_1','subject_2','subject_3'))
+````
+With ````separate```` we are splitting the **col** _subjects_ by the **separator** _"-"_ **into** three distinct columns called *subject_1, subject_2, subject_3*. 
+
+**Are we done yet?** No, the variable representing **the subject order** is still **spread across three columns**. We have to **gather** it.
+
+````
+today_courses <- gather(today_courses, order, subject, subject_1:subject_3)
+````
+
+You surely agree with me that *subject_1* does not  clearly represent subjects order. So, as a final step:
+
+````
+today_courses$order <- gsub(pattern='subject_', replacement='', fixed=TRUE, x=today_courses$order)
+````
+
+Here we are using _gsub_, to replace a **pattern** with a **replacement** string. In our case, *subject_* is replaced with an empty character. ````fixed=TRUE```` tells ````gsub```` to match the string **as is** instead of considering it a **regular expression**. There are multiples ways to achieve the same results, but I find _gsub_ to be fast and comfortable for this task.
+
 
 ## Diving into the tidyverse
 
@@ -111,11 +177,20 @@ ucec %>%
 _dplyr_ immediately knows that we are going to operate on the data frame _ucec_ and its columns. Keep this detail in mind, because you will surely encounter it again when you start plotting graphics in **ggplot2**. 
 
 
+## Exercise 5
+Do you remember our *today_courses* data frame. All of the functions we applied: _separate, gather..._ can be coded as a single pipe.
+
+````
+tidy_courses <- today_courses %>%
+                separate(col = subjects, into = c('subject_1', 'subject_2', 'subject_3'), sep = '-') %>%
+                gather(order, subjects, subject_1:subject_3)
+````
+
 ## Group-wise operations with group_by
 
 Before learning about ````group_by````, perform the following exercise:
 
-## Exercise 4
+## Exercise 6
 How many **unique** tumor samples do we have right now?
 
 Now, we are going to calculate the **mean tumoral depth of all the variants** by **sample**. In other words, we need to divide our data frame into groups, each being one sample. Then, we have to sum the total tumoral depth of all variants and divide it by the amount of said variants. This is certainly achievable with base R, but with _dplyr_ It becomes trivial. Our key function here is **group_by**.
@@ -135,3 +210,7 @@ As before, try to guess what this pipe does before actually running it. Call the
 group_by(Tumor_Sample_Barcode)
 ````
 This is the first step of our pipe. It basically splits our data frame in groups sharing the same *Tumor_Sample_Barcode*.
+
+
+## References
+1. Wickham, Hadley. 2014. Tidy Data. Journal of Statistical Software; Vol 59; Issue 10.
