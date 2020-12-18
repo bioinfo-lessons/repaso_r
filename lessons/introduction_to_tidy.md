@@ -282,7 +282,7 @@ For each **tumor sample**, report:
   <summary>Answer</summary>
 
   ```R
-patients_standard_deviation  <- depth_by_sample <- ucec %>%
+patients_standard_deviation <- ucec %>%
                                 group_by(Tumor_Sample_Barcode) %>%
                                 summarise(length(unique(Variant_Classification)), sd(c(n_depth)), sd(t_depth))
   ```
