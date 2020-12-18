@@ -1,3 +1,5 @@
+[Back to table of contents](../README.md/#table-of-contents)
+
 # Introduction to the tidyverse
 
 Base R's implementation of data frames and matrices provides us with a limited set of tools to work with tabular data. A lot of real world problems involving data frames and matrices are cumbersome to solve without some additional packages. In this lesson, we are going to familiarize ourselves with the collection of libraries which compose the _tidyverse_.
@@ -105,13 +107,35 @@ Now, we are ready to start our analysis in R. R offers ````read.csv```` as a gen
 ## Exercise 1: parsing the table
 Load the data so that you get a data frame of **120** columns. The first one should be called **Hugo_Symbol**. To guide you through all the functions available in _readr_, remember the questions we previously answered about the data. Take into account that the **C** in **CSV** stands for **comma**. Which separator does our file use? Do not hesitate yo use the library's documentation. Get yourself accustomed to reading and understanding your functions. It will save you thousands of Google queries.
 
+<details>
+  <summary>Answer</summary>
+ ````
+ ucec  <- readr::read_tsv(file='TCGA.UCEC.maf', skip = 5)
+ ````
+</details>
+
+
 ## Exercise 2: understanding our data
 Take a look at the column names.  What does each row represent? If you had to choose a single column as the index, which would you choose? 
+
+<details>
+  <summary>Answer</summary>
+  Each column contains data about a given somatic variant. Each row is a unique somatic alteration. Data frame indexes cannot contain duplicates, and in this case, the default index representing the total amount of variants present in this project is sufficient. 
+</details>
 
 ## Exercise 3: Filtering low quality variants.
 Some of the regions sequenced had a low tumoral depth, that is: there are few reads from that region originating in tumoral samples. As such, we cannot really trust the variant. Moreover, we need sufficient normal depth too, because somatic variants are called by filtering out alterations already present in a matched normal sample. 
 
 Filter (remove) variants whose tumoral depth or normal depth was below 30. Start by finding the right columns and then **subset** the data frame using logical vectors as we reviewed.
+
+<details>
+  <summary>Answer</summary>
+low_t_depth <- ucec$t_depth >= 30
+low_n_depth <- ucec$n_depth >= 30
+
+ucec <- ucec[low_t_depth & low_n_depth, ]
+</details>
+
 
 ## Exercise 4: Filtering non functional variants
 Some of the variants may not be functionally relevant. Start by retrieving all the **unique** values in the column ```Variant_Classification```. Then, remove those falling in one of the following categories:
@@ -129,6 +153,14 @@ reptiles <- c('salamander', 'alligator', 'crocodile', 'diplodocus')
 reptile_animals <- animals %in% reptiles
 ````
 will return **a boolean** vector of length 3, which is the same as animals. The first value will be **TRUE** if the first value in **animals** appears in reptiles. Otherwise, it will be **FALSE**.
+
+<details>
+  <summary>Answer</summary>
+unique(ucec$Variant_Classification)
+non_relevant <- c('Silent', 'Intron', "5'Flank", "3'UTR", "5'UTR")
+
+ucec_base <- ucec[!ucec$Variant_Classification %in% non_relevant,]
+</details>
 
 ## Filtering, the tidy way
 We have filtered our data using base R. Now, we are going to perform the same filtering step using _dplyr_, a powerful library of the _tidyverse._ The best way to understand _dplyr_ is to look at how our filtering would look like with _dplyr_.
@@ -172,11 +204,12 @@ _dplyr_ immediately knows that we are going to operate on the data frame _ucec_ 
 ## Exercise 5
 Do you remember our *today_courses* data frame. All of the functions we applied: _separate, gather..._ can be coded as a single pipe.
 
-````
+<details>
+  <summary>Answer</summary>
 tidy_courses <- today_courses %>%
                 separate(col = subjects, into = c('subject_1', 'subject_2', 'subject_3'), sep = '-') %>%
                 gather(order, subjects, subject_1:subject_3)
-````
+</details>
 
 ## Group-wise operations with group_by
 
@@ -184,6 +217,11 @@ Before learning about ````group_by````, perform the following exercise:
 
 ## Exercise 6
 How many **unique** tumor samples do we have right now?
+
+<details>
+  <summary>Answer</summary>
+  2
+</details>
 
 Now, we are going to calculate the **mean tumoral depth of all the variants** by **sample**. In other words, we need to divide our data frame into groups, each being one sample. Then, we have to sum the total tumoral depth of all variants and divide it by the amount of said variants. This is certainly achievable with base R, but with _dplyr_ It becomes trivial. Our key function here is **group_by**.
 
@@ -202,6 +240,55 @@ As before, try to guess what this pipe does before actually running it. Call the
 group_by(Tumor_Sample_Barcode)
 ````
 This is the first step of our pipe. It basically splits our data frame in groups sharing the same *Tumor_Sample_Barcode*.
+
+````
+summarise(n(), mean(t_depth))
+````
+This functions creates a new data frame with one column for each grouping variable and summary statistics. So, we are grouping by *Tumor_Sample_Barcode* and then, for each of these groups, we are calculating ````n()```` which is the number of observations, and the
+average *t_depth* for each group. 
+
+
+## Exercise 7
+For each **tumor sample**, report:
+
+1. The **standard deviation** of *t_depth*.
+1. The **standard deviation** of *n_depth*.
+1. How many **unique** types of **variants** are present in **each tumor sample.**
+
+
+<details>
+  <summary>Answer</summary>
+  ```R
+patients_standard_deviation  <- depth_by_sample <- ucec %>%
+                                group_by(Tumor_Sample_Barcode) %>%
+                                summarise(length(unique(Variant_Classification)), sd(c(n_depth)), sd(t_depth))
+  ```
+</details>
+
+
+## Closing surprise for those ahead of the rest
+
+Write the following code:
+
+````
+## Just in case, load these, even If they are part of the tidyverse
+library('ggplot2')
+library('scales')
+alterations_by_sample <- ggplot(data=ucec, aes(x=Tumor_Sample_Barcode))+
+                         geom_bar(aes(y = (..count..)/sum(..count..), fill=Variant_Classification))+
+                         scale_y_continuous(labels=percent) +
+                         labs(title='Distribution of somatic alterations', x='Tumor sample', y='% of total alterations', fill='Variant  class')+
+                         theme_bw()+
+                         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+````
+
+Now, type:
+
+````
+alterations_by_sample
+````
+
+If you feel curious, try to understand the layered structure of this plot. 
 
 
 
