@@ -35,13 +35,13 @@ The concepts behind tidy data were described in “Tidy Data” by Hadley Wickha
 ## Hands-On: An untidy example
 
 Create the following data frame:
-````
+```R
 messy <- data.frame(
   name = c("Sandra", "Alfredo", "Laura"),
   a = c(63, 78, 64),
   b = c(56, 90, 50)
 )
-````
+```
 This data frame represents the heartrate of three different patients while treated with two drugs: a and b. Before fixing it, **think about why it is broken.** Try to remember the key concepts of clean data and apply them to this data frame.
 
 To untangle out data, we are going to learn our first _tidy_ function: ````gather````, from the _tidy_ package. 
