@@ -96,6 +96,13 @@ m[my_rows,]
 ````
 Take your time to understand the logic behind this operations. Start by looking up the documentation for ```?rep``` if you are unsure. Do you understand what we did here?
 
+
+<details>
+  <summary>Answer</summary>
+  ````rep```` creates a vector of 7 ````FALSE```` values. We are concatenating this vector with a single ````TRUE```` value to get a length 8 vector.
+</details>
+
+
 Now try the following:
 ````
 greater_than_11 <- m > 11
@@ -111,6 +118,17 @@ Try to reason the following questions:
 
 1. Would the following operation fail? ````m[greater_than_11,]````Why?
 1. How would you retrieve all cells of the first column whose values are greater than 20?
+
+<details>
+  <summary>Answers</summary>
+  1. greater_than_11 is a boolean matrix, not a vector. To subset with a boolean matrix, the answer is: 
+  ````m[greater_than_11]````
+  1. To retrieve all cells of the first column with values greater than 20:
+  ````
+  above_20 <- m[,1] > 20
+  ````
+</details>
+
 
 ## Appending rows or columns
 To add a new row to a matrix, type:
@@ -183,6 +201,12 @@ bioinformatics_students[,'previous_salary'] <- c(25000,0)
 ````
 **It does work! Why?** Think about it for a minute and try to answer it on your own. They keyword here is **recycling**.
 
+
+<details>
+  <summary>Answer</summary>
+  For data frames, partial vector recycling will fail. For our three students, attempting to recycle a vector of length 2 will fail because we would have to recycle a single element of the shorter vector. The class ````data.frame```` will only recycle a vector a **whole** number of times. Since any number can be divided by 1, assigning a single value to a new column will always succeed. The same happens when we have 4 students instead of 3 as 4/2 returns a whole number.
+</details>
+
 ## Coercing a data frame to matrix and the other way around
 
 Coercing a matrix to data frame is straightforward due to data frames being heterogeneous and flexible. To do so, the appropiate function in base R is:
@@ -211,6 +235,12 @@ Before trying to coerce this data frame to a matrix, think for a moment about th
 1. Can we directly convert _a_ to a matrix? Why?
 1. Is there any transformation we could apply before coercing? Which one? Why?
 
+<details>
+  <summary>Answer</summary>
+  1. No, because matrices are homogeneous and our data frame has columns of differing data types.
+  1. We should first coerce one of our matrix vector. Our second column is made up of integers, which can be coerced to characters to match our first column, alphabet.
+</details>
+
 Actually, R will coerce this data frame to a matrix without any warning or system message. Let's try it:
 
 ````
@@ -237,3 +267,5 @@ our new column has been coerced to... you guessed it: **character**.
 ## Is there any way to predict how R will coerce our columns? 
 As by the docs, ```as.matrix()``` returns a character matrix ff there are only atomic columns and any non-(numeric/logical/complex) column. Factors are coerced using ```as.vector()``` and format is used for the rest of non-character columns. Otherwise, R follows a   **coercion hierarchy**, more precisely: complex > double > integer > logical. I.E: all-logical data frames are coerced to all logical matrices, but a mixed logical-integer data frame is coerced to an integer matrix.
 
+
+[Back to table of contents](../README.md/#table-of-contents)
