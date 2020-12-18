@@ -200,7 +200,7 @@ However, If we add another student like this:
 ```R
 bioinformatics_students[4,] <- c('computational', 'Ana', 10, 5)
 ```
-
+ 
 and then try again to append our *previous_salary*:
 
 ```R
@@ -227,7 +227,7 @@ as.data.frame(matrix)
 However, the other way around is not that simple. Create a simple data frame by typing:
 
 ```R
-a <- c('alphabet'=c('alpha', 'beta', 'gamma'), 'arabic'=c(1,2,3))
+a <- data.frame('alphabet'=c('alpha', 'beta', 'gamma'), 'arabic'=c(1,2,3))
 
 # Visualize it:
 a
