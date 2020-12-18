@@ -13,5 +13,5 @@ Finally, I'll be more than happy to answer any questions our doubts you send me 
 1. [Software installation.](lessons/software_installation.md)
 1. [Matrices and data frames.](lessons/matrix_dataframes.md)
 1. [Harnessing the _tidyverse_.](lessons/introduction_to_tidy.md)
-1. [Objects.](lessons/objets.md)
+1. [Objects.](lessons/objects.md)
 1. [Dos and dont's: tips from a fellow bioinformatician.](lessons/dos_and_dont.md)
