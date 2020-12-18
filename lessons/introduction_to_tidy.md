@@ -109,9 +109,8 @@ Load the data so that you get a data frame of **120** columns. The first one sho
 
 <details>
   <summary>Answer</summary>
- ```R
- ucec  <- readr::read_tsv(file='TCGA.UCEC.maf', skip = 5)
- ```
+
+  ucec  <- readr::read_tsv(file='TCGA.UCEC.maf', skip = 5)
 </details>
 
 
