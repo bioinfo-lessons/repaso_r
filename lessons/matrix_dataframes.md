@@ -1,3 +1,4 @@
+[Back to table of contents](../README.md/#table-of-contents)
 # Working with tables in R
 
 For the purposes of this lesson, we are not talking about R tables here, which are more specific to the statistic concept of contingency table. Tabular data is usually handled as data frames and matrices. For instance, one of the most characteristic bioinformatics matrix is the **count matrix**, which stores geneXsample counts from an RNA-Seq experiment. Similarly, one of the most common data frame you will work with is the experiment data associated with a count matrix. It keeps vital information about an experiment such as which samples belong to which experimental group our how each sample as processed. Both are used together in DEG (**D**ifferential **G**ene **E**xpression) which you will be reviewing soon.

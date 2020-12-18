@@ -42,7 +42,7 @@ messy <- data.frame(
 ````
 This data frame represents the heartrate of three different patients while treated with two drugs: a and b. Before fixing it, **think about why it is broken.** Try to remember the key concepts of clean data and apply them to this data frame.
 
-The first _tidy_ function we are going to learn today is ````gather````, from the _tidy_ package. 
+To untangle out data, we are going to learn our first _tidy_ function: ````gather````, from the _tidy_ package. 
 
 ````
 fixed <- gather(messy, 'drug', 'heartrate', a:b)
@@ -51,7 +51,7 @@ Note that I am not quoting the column names of *messy* here.
 
 **What does ````gather()```` do?**
 
-gather() takes multiple columns, and gathers them into key-value pairs: it makes “wide” data longer. Another alternative for ````gather```` is ````melt```` from the library _reshape2_. This transformation is also called _pivot_ (spreadsheets) and _fold_ (databases). 
+````gather()```` takes multiple columns, and gathers them into key-value pairs: it makes “wide” data longer. Another alternative for ````gather```` is ````melt```` from the library _reshape2_. This transformation is also called _pivot_ (spreadsheets) and _fold_ (databases). 
 
 
 ## Separating columns
@@ -61,7 +61,7 @@ Now we are ready to tackle the example we reviewed at the beginning of this less
 today_courses <- data.frame('student'=c('Pedro','Marta'), 'subjects'=c('Math-English-French', 'Computer_science-Math-Biology'))
 ```` 
 We have two students, each with 3 subjects. The order of the subjects is important, so we have to preserve it somehow while cleaning our data. 
-First, we are going to separate our _subjects_ column into three distinct columns.
+First, we are going to **separate** our _subjects_ column into three distinct columns.
 
 ````
 today_courses <- separate(today_courses, col=subjects, sep='-', into=c('subject_1','subject_2','subject_3'))
@@ -83,13 +83,12 @@ today_courses$order <- gsub(pattern='subject_', replacement='', fixed=TRUE, x=to
 Here we are using _gsub_, to replace a **pattern** with a **replacement** string. In our case, *subject_* is replaced with an empty character. ````fixed=TRUE```` tells ````gsub```` to match the string **as is** instead of considering it a **regular expression**. There are multiples ways to achieve the same results, but I find ````gsub```` to be fast and comfortable for this task.
 
 
-## Diving into the tidyverse
+## Beyond data tidying: data analysis, the tidy way.
 
 ## Reading data
-The _tidyverse_ includes libraries ranging from reading data from files to plotting beautiful graphics with _ggplot2_. We are going to delve into
-the collection using public somatic alterations data from The Cancer Genome Atlas (TCGA).  More precisely, we are going to work with _uterine carcinosarcoma_ samples. Navigate to the _examples_ directory in this repository and unzip the contests of *table_examples.zip* there. 
+The _tidyverse_ includes libraries ranging from reading data from files to plotting beautiful graphics with _ggplot2_. Now that we understand the basics of data reshaping, we are going to analyze a dataset of somatic alterations from _uterine carcinosarcoma_ samples, part of The Cancer Genome Atlas (TCGA). Navigate to the _examples_ directory in this repository and unzip the contests of *table_examples.zip* there. 
 
-Before parsing it in R, we are going to take a peek at our table with **bash**:
+Before parsing it in R, take a peek at the table with **bash**:
 ````
 head TCGA.UCEC.maf -n 10
 ````
@@ -101,7 +100,7 @@ Try to answer the following questions:
 1. What does the line before the column names represent?
 
 
-Now, we are ready to start our analysis in R. Instead of the base R function ````read.csv```` we are going to start using the _tidyverse_ right away. The library _readr_ (**R**ead **r**ectangular) posess various data parsers with are considerably faster and more flexible. 
+Now, we are ready to start our analysis in R. R offers ````read.csv```` as a general purpose wrapper for _comma separated files_. The library _readr_ (**R**ead **r**ectangular) posess various data parsers with are considerably faster and more flexible. 
 
 ## Exercise 1: parsing the table
 Load the data so that you get a data frame of **120** columns. The first one should be called **Hugo_Symbol**. To guide you through all the functions available in _readr_, remember the questions we previously answered about the data. Take into account that the **C** in **CSV** stands for **comma**. Which separator does our file use? Do not hesitate yo use the library's documentation. Get yourself accustomed to reading and understanding your functions. It will save you thousands of Google queries.
@@ -203,6 +202,10 @@ As before, try to guess what this pipe does before actually running it. Call the
 group_by(Tumor_Sample_Barcode)
 ````
 This is the first step of our pipe. It basically splits our data frame in groups sharing the same *Tumor_Sample_Barcode*.
+
+
+
+[Back to table of contents](../README.md/#table-of-contents)
 
 
 ## References

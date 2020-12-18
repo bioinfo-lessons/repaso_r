@@ -1,3 +1,4 @@
+[Back to table of contents](../README.md/#table-of-contents)
 # R do's and don'ts
 
 ## Project management
@@ -43,3 +44,5 @@ statistical tests, algorithms and data manipulation tasks such as sorting, split
 1. Loop over lists by explicit indexes or dataframe rows. R is fundamentally a vector based language. These loops are not only slow and inneficient, they also defeat the purpose of vectors in the first place. Before looping, ask yourself If you can accomplish the same result using vector operations. Most of the time, an _apply_ is sufficient if you really need to loop. 
 1. Dinamically append rows to a dataframe inside a loop. This is slow, inefficient and error prone. Fill a list instead, and once the loop is filled, convert it to a dataframe and concatenate them. 
 1. Abuse ````rbind```` or ````cbind```` when working with matrices.  Resist the urge to fill a matrix using a loop. Fill a vector list instead and then coerce it to a matrix. 
+
+[Back to table of contents](../README.md/#table-of-contents)
