@@ -99,7 +99,10 @@ Take your time to understand the logic behind this operations. Start by looking 
 
 <details>
   <summary>Answer</summary>
+
   ````rep```` creates a vector of 7 ````FALSE```` values. We are concatenating this vector with a single ````TRUE```` value to get a length 8 vector.
+  Then, we subset our matrix, retrieving rows whose position in the matrix matches a ```TRUE``` position in ````my_rows````. In this case, the only ````TRUE````value in ````my_rows```` is the first one, so only the **first** row of ````m```` is retrieved.
+
 </details>
 
 
