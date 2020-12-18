@@ -20,9 +20,9 @@ As a curiosity: a lot of R functions on data frames will first coerce them to ma
 
 Remember that in R, matrices are represented by: matrix[rows, columns]. Most of the operations you need to know about involve subsetting, so we will start with some examples. Let's start by creating a matrix, m:
 
----R
+````
 m <- matrix(1:80, nrow=8, ncol=10, byrow=TRUE)
----
+````
 Our matrix will have 8 rows, 10 columns and their values will range from 1 to 80. The last argument tells R to fill the values row wise. If you are in doubt, change it to ````FALSE```` and see what happens.
 
 ### Retrieving rows an columns by their index
