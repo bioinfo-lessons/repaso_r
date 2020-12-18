@@ -91,6 +91,7 @@ Here we are using _gsub_, to replace a **pattern** with a **replacement** string
 The _tidyverse_ includes libraries ranging from reading data from files to plotting beautiful graphics with _ggplot2_. Now that we understand the basics of data reshaping, we are going to analyze a dataset of somatic alterations from _uterine carcinosarcoma_ samples, part of The Cancer Genome Atlas (TCGA). Navigate to the _examples_ directory in this repository and unzip the contests of *table_examples.zip* there. 
 
 Before parsing it in R, take a peek at the table with **bash**:
+
 ```bash
 head TCGA.UCEC.maf -n 10
 ```
@@ -99,7 +100,15 @@ Try to answer the following questions:
 
 1. Is this really a tabular file? If so. How are values separated?
 1. Which line contains the column names?
-1. What does the line before the column names represent?
+1. What does the lines before the column names represent?
+
+<details>
+  <summary>Answer</summary>
+
+  1. It is. Values are tab separated and a 5 line header is present.
+  1. The 6th.
+  1. Those five lines are the project header. It contains metadata about the project.
+</details>
 
 
 Now, we are ready to start our analysis in R. R offers ````read.csv```` as a general purpose wrapper for _comma separated files_. The library _readr_ (**R**ead **r**ectangular) posess various data parsers with are considerably faster and more flexible. 
