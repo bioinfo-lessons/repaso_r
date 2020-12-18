@@ -209,7 +209,7 @@ Here we are assigning **ucec** to **ucec**... or are we? Look at ````%>%````. It
 ```R
 filter(!Variant_Classification %in% non_relevant)
 ```
-This line is self explanatory. We are **filtering** our data frame. Have you noticed the ````!````? It is a boolean **operator**, which you can read ad **NOT**. Basically, we are keeping rows where the column **Variant_classification** is not ````%in%```` non_relevant. 
+This line is self explanatory. We are **filtering** our data frame. Have you noticed the ````!````? It is a boolean **operator**, which you can read as **NOT**. Basically, we are keeping rows where the column **Variant_classification** is not ````%in%```` non_relevant. 
 
 Have you noticed that we have written **Variant_classification** without quoting? That's because by writing:
 
