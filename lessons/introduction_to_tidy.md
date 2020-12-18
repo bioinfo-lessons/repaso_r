@@ -46,9 +46,9 @@ This data frame represents the heartrate of three different patients while treat
 
 To untangle out data, we are going to learn our first _tidy_ function: ````gather````, from the _tidy_ package. 
 
-````
+```R
 fixed <- gather(messy, 'drug', 'heartrate', a:b)
-````
+```
 Note that I am not quoting the column names of *messy* here. 
 
 **What does ````gather()```` do?**
@@ -59,28 +59,28 @@ Note that I am not quoting the column names of *messy* here.
 ## Separating columns
 
 Now we are ready to tackle the example we reviewed at the beginning of this lesson.
-````
+```R
 today_courses <- data.frame('student'=c('Pedro','Marta'), 'subjects'=c('Math-English-French', 'Computer_science-Math-Biology'))
-```` 
+``` 
 We have two students, each with 3 subjects. The order of the subjects is important, so we have to preserve it somehow while cleaning our data. 
 First, we are going to **separate** our _subjects_ column into three distinct columns.
 
-````
+```R
 today_courses <- separate(today_courses, col=subjects, sep='-', into=c('subject_1','subject_2','subject_3'))
-````
+```
 With ````separate```` we are splitting the **col** _subjects_ by the **separator** _"-"_ **into** three distinct columns called *subject_1, subject_2, subject_3*. 
 
 **Are we done yet?** No, the variable representing **the subject order** is still **spread across three columns**. We have to **gather** it.
 
-````
+```R
 today_courses <- gather(today_courses, order, subject, subject_1:subject_3)
-````
+```
 
 You surely agree with me that *subject_1* does not  clearly represent subjects order. So, as a final step:
 
-````
+```R
 today_courses$order <- gsub(pattern='subject_', replacement='', fixed=TRUE, x=today_courses$order)
-````
+```
 
 Here we are using _gsub_, to replace a **pattern** with a **replacement** string. In our case, *subject_* is replaced with an empty character. ````fixed=TRUE```` tells ````gsub```` to match the string **as is** instead of considering it a **regular expression**. There are multiples ways to achieve the same results, but I find ````gsub```` to be fast and comfortable for this task.
 
@@ -91,9 +91,9 @@ Here we are using _gsub_, to replace a **pattern** with a **replacement** string
 The _tidyverse_ includes libraries ranging from reading data from files to plotting beautiful graphics with _ggplot2_. Now that we understand the basics of data reshaping, we are going to analyze a dataset of somatic alterations from _uterine carcinosarcoma_ samples, part of The Cancer Genome Atlas (TCGA). Navigate to the _examples_ directory in this repository and unzip the contests of *table_examples.zip* there. 
 
 Before parsing it in R, take a peek at the table with **bash**:
-````
+```bash
 head TCGA.UCEC.maf -n 10
-````
+```
 
 Try to answer the following questions:
 
@@ -109,8 +109,9 @@ Load the data so that you get a data frame of **120** columns. The first one sho
 
 <details>
   <summary>Answer</summary>
-
+  ```R
   ucec  <- readr::read_tsv(file='TCGA.UCEC.maf', skip = 5)
+  ```
 </details>
 
 
@@ -139,18 +140,18 @@ ucec <- ucec[low_t_depth & low_n_depth, ]
 ## Exercise 4: Filtering non functional variants
 Some of the variants may not be functionally relevant. Start by retrieving all the **unique** values in the column ```Variant_Classification```. Then, remove those falling in one of the following categories:
 
-````
+```R
 'Silent', 'Intron', "5'Flank", "3'UTR", "5'UTR"
-````
+```
 Save the filtered data frame as **base_ucec**. 
 
 As a tip for this exercise, take into account that the expression:
-````
+```R
 animals <- c('crocodile', 'cat', 'salamander')
 reptiles <- c('salamander', 'alligator', 'crocodile', 'diplodocus')
 
 reptile_animals <- animals %in% reptiles
-````
+```
 will return **a boolean** vector of length 3, which is the same as animals. The first value will be **TRUE** if the first value in **animals** appears in reptiles. Otherwise, it will be **FALSE**.
 
 <details>
@@ -164,39 +165,39 @@ ucec_base <- ucec[!ucec$Variant_Classification %in% non_relevant,]
 ## Filtering, the tidy way
 We have filtered our data using base R. Now, we are going to perform the same filtering step using _dplyr_, a powerful library of the _tidyverse._ The best way to understand _dplyr_ is to look at how our filtering would look like with _dplyr_.
 
-````
+```R
 non_relevant <- c('Silent', 'Intron', "5'Flank", "3'UTR", "5'UTR")
 
 ucec <- ucec %>%
             filter(!Variant_Classification %in% non_relevant)
-````
+```
 Take a moment and try to guess what this piece of code is doing. 
 
 
 
 Ok, let's go through this piece of code line by line:
 
-````
+```R
 non_relevant <- c('Silent', 'Intron', "5'Flank", "3'UTR", "5'UTR")
-````
+```
 Here we are defining a vector of values from the column *Variant_Classification* which we want to filter out from our data frame. 
 
-````
+```R
 ucec <- ucec %>%
-````
+```
 
 Here we are assigning **ucec** to **ucec**... or are we? Look at ````%>%````. It is _dplyr's pipe operator_. For those unfamiliar with Unix's pipes, this expression tells R that the next function will be applied to our **ucec** data frame. When using _dplyr_ pipes, make sure to **always** start a new line **after** the operator. RStudio should be smart enough to indent the line for you. 
 
-````
+```R
 filter(!Variant_Classification %in% non_relevant)
-````
+```
 This line is self explanatory. We are **filtering** our data frame. Have you noticed the ````!````? It is a boolean **operator**, which you can read ad **NOT**. Basically, we are keeping rows where the column **Variant_classification** is not ````%in%```` non_relevant. 
 
 Have you noticed that we have written **Variant_classification** without quoting? That's because by writing:
 
-````
+```R
 ucec %>%
-````
+```
 _dplyr_ immediately knows that we are going to operate on the data frame _ucec_ and its columns. Keep this detail in mind, because you will surely encounter it again when you start plotting graphics in **ggplot2**. 
 
 
@@ -226,23 +227,23 @@ Now, we are going to calculate the **mean tumoral depth of all the variants** by
 
 Here is the snippet: 
 
-````
+```R
 depth_by_sample <- ucec %>%
                         group_by(Tumor_Sample_Barcode) %>%
                         summarise(n(), mean(t_depth))
-````
+```
 As before, try to guess what this pipe does before actually running it. Call the documentation to assist you. 
 
 **Group by** operations are really prevalent in Bioinformatics. Remember that the sole purpose of _factors_ is to encode _conditions_ or _states_. Some of you may have thought about _loops_ already, _specially_ if you come from a computational background. However, loops are usually ineficcient, slow and defeat the purpose of vectors operations in the first place.
 
-````
+```R
 group_by(Tumor_Sample_Barcode)
-````
+```
 This is the first step of our pipe. It basically splits our data frame in groups sharing the same *Tumor_Sample_Barcode*.
 
-````
+```R
 summarise(n(), mean(t_depth))
-````
+```
 This functions creates a new data frame with one column for each grouping variable and summary statistics. So, we are grouping by *Tumor_Sample_Barcode* and then, for each of these groups, we are calculating ````n()```` which is the number of observations, and the
 average *t_depth* for each group. 
 
@@ -269,7 +270,7 @@ patients_standard_deviation  <- depth_by_sample <- ucec %>%
 
 Write the following code:
 
-````
+```R
 ## Just in case, load these, even If they are part of the tidyverse
 library('ggplot2')
 library('scales')
@@ -279,13 +280,13 @@ alterations_by_sample <- ggplot(data=ucec, aes(x=Tumor_Sample_Barcode))+
                          labs(title='Distribution of somatic alterations', x='Tumor sample', y='% of total alterations', fill='Variant  class')+
                          theme_bw()+
                          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-````
+```
 
 Now, type:
 
-````
+```R
 alterations_by_sample
-````
+```
 
 If you feel curious, try to understand the layered structure of this plot. 
 
