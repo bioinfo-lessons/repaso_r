@@ -85,7 +85,7 @@ today_courses$order <- gsub(pattern='subject_', replacement='', fixed=TRUE, x=to
 Here we are using _gsub_, to replace a **pattern** with a **replacement** string. In our case, *subject_* is replaced with an empty character. ````fixed=TRUE```` tells ````gsub```` to match the string **as is** instead of considering it a **regular expression**. There are multiples ways to achieve the same results, but I find ````gsub```` to be fast and comfortable for this task.
 
 
-## Beyond data tidying: data analysis, the tidy way.
+## Beyond data tidying: data analysis, the tidy way
 
 ## Reading data
 The _tidyverse_ includes libraries ranging from reading data from files to plotting beautiful graphics with _ggplot2_. Now that we understand the basics of data reshaping, we are going to analyze a dataset of somatic alterations from _uterine carcinosarcoma_ samples, part of The Cancer Genome Atlas (TCGA). Navigate to the _examples_ directory in this repository and unzip the contests of *table_examples.zip* there. 
@@ -277,7 +277,7 @@ patients_standard_deviation  <- depth_by_sample <- ucec %>%
                                 group_by(Tumor_Sample_Barcode) %>%
                                 summarise(length(unique(Variant_Classification)), sd(c(n_depth)), sd(t_depth))
   ```
-  
+
 </details>
 
 
