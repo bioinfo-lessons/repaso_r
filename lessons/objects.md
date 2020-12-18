@@ -24,7 +24,7 @@ There are several differences between them. Let's start by exploring S3 classes.
 
 Let's create an object of class **data.frame** and explore it:
 
-````
+```R
 bioinformatics_students <- data.frame(background=c('computational', 'life_sciences', 'other'), name=c('Marta', 'Santiago', 'Pedro'))
 bioinformatics_students
 
@@ -33,17 +33,17 @@ bioinformatics_students
 2 life_sciences Santiago
 3         other    Pedro
 
-````
+```
 To check the class of the object **bioinformatics_students**, type:
 
-````
+```R
 class(bioinformatics_students)
 [1] "data.frame"
-````
+```
 
 Which attributes are associated with this object of class **data.frame**?
 
-````
+```R
 attributes(bioinformatics_students)
 $names
 [1] "background" "name"      
@@ -53,19 +53,19 @@ $class
 
 $row.names
 [1] 1 2 3
-````
+```
 As you can see, the object **bioinformatics_students** has three attributes: names, class and row.names. For instance, to retrieve the data inside
 **names**, you can type:
 
-````
+```R
 names(bioinformatics_students)
-````
+```
 
 Now that we understand the attributes in this object, let's check which  methods are avaliable for this object. To do so, type:
 
-````
+```R
 methods(class='data.frame')
-````
+```
 Why **data.frame** and not **bioinformatics_students**. All the methods we just retrieved are available for objects of class _data.frame_, no matter
 their attributes. Attributes, on the other hand, contain values which are especific to the instance/object. 
 
@@ -85,56 +85,56 @@ A method is a piece of code that is called by a name that is associated with an 
 ## Our own S3 class
 
 We can define new S3 classes. For instance:
-````
+```R
 Batman <- list(Name = "Batman", Age = 26, Power="Money")
 class(Batman) <- "Hero"
-````
+```
 
 Our hero instance of the _Hero_ class has three attributes: **Name, Age and Power**. To retrieve the data stored in them, we can type:
 
-````
+```R
 Batman$Power
 [1] "Money"
-````
+```
 
 Now, we will be adding a **function** to our class **Hero** to model its behaviour.
 
-````
+```R
 power <- function(object) {
 UseMethod("power")
 }
-````
+```
 We are telling R that the **function** _power_ called with a single argument (object),
 should  call the method **power**.
 
 And next we have to tell R what to do when **power** is called on an object of class **Hero**:
-````
+```R
 power.Hero <- function(object) {
 cat("You have the power of", object$Power, "\n")
 }
-````
+```
 
 No try to use your newly created method **power**:
 
-````
+```R
 power(Batman)
-````
+```
 
 ## What sets S3 classes apart from S4 classes
 
 We previously discussed that S4 classes are more _formal_. Let's dig into the meaning of this assessment. Start by typing:
 
-````
+```R
 not_a_data_frame <- 'Fruit'
 class(not_a_data_frame) <- 'data.frame'
-````
+```
 Now, let's check it's attributes:
 
-````
+```R
 attributes(not_a_data_frame)
 $class
 [1] "data.frame"
-````
+```
 R does not try to assess whether _Fruit_ constitutes a valid data.frame. It just tries to comply with the commands we just typed. 
 
 ## Why bother with S3 classes in the first place?
@@ -146,13 +146,13 @@ You are likely to encounter S4 objects when working with state of the art bioinf
 
 First type:
 
-````
+```R
 setClass("Student", slots=list(name="character", origin="character", id="numeric"))
 student_s4 <- new("Student",name="María", origin="computational", id=42)
 student_s4
-````
+```
 You will get:
-````
+```R
 An object of class "Student"
 Slot "name":
 [1] "María"
@@ -163,28 +163,28 @@ Slot "origin":
 Slot "id":
 [1] 42
 
-````
+```
 Ok, we have a lot of information to digest here. Take a look at the 'setClass' function. It has a name (class name), and then a list of three tuples.
 Each define a class slot. Think of them as S3 attributes. But, If you take a closer look, you will notice that we are also defining which kind of data
 types can fit each slot. For instance, the slot _name_ is of type _character_. 
 
 You will also notice that typing:
 
-````
+```R
 student_s4$name 
-````
+```
 
 no longer works, retuning instead:
 
-````
+```R
 Error in student_s4$name : $ operator not defined for this S4 class
-````
+```
 
 To access **S4 objects slots**, we will use a different operator:
 
-````
+```R
 student_s4@name
-````
+```
 
 You will also notice that we have used the ```new``` keyword. It tells R we are
 instanciating a new object of class _Student_. It will also check if our input
@@ -196,30 +196,30 @@ As you can see, S4 are more strict in terms of object creation.
 
 You can check if a given object is S4 by typing:
 
-````
+```R
 isS4(student_s4)
-````
+```
 It will return ````TRUE```` if that's the case and ````FALSE```` otherwise.
 
 To change the data stored in a given slot, type:
 
-````
+```R
 student_s4@name <- 'Marta'
-````
+```
 
 Now, try to set the id, which we defined as **numeric** when we created the class.
 But instead of using a number, let's test what happens If we try to set a character type instead.
 
-```` 
+```R 
 student_s4@id <- 'test'
-````
+```
 
 R will tell us that:
 
-````
+```R
 Error in (function (cl, name, valueClass)  : 
   assignment of an object of class “character” is not valid for @‘id’ in an object of class “Student”; is(value, "numeric") is not TRUE
-````
+```
 
 Indeed, when we created the class **Student**, we explicitly told R that the slot **id** is of type **numeric**, and thus, characters
 are not allowed.
@@ -230,27 +230,27 @@ As you might have guessed, S4 objects are more robust and their behaviour, more 
 
 Type the following:
 
-````
+```R
 get_background <- function(object) {
 UseMethod("get_background")
 }
-````
+```
 Again, we are telling R that the function get_background should call the method
 **get_background** and pass the object.
 
-````
+```R
 setMethod("get_background", "Student", function(object) {
 cat("This student background is:", object@origin, "\n")
 }
 )
-````
+```
 And now we are telling R that the method **get_background** when called on objects
 of class **Student** should execute the code in brackets.
 
-````
+```R
 get_background(student_s4)
 This student background is: computational 
-````
+```
 
 ## Summary
 
