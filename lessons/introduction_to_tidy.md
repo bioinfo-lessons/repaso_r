@@ -109,6 +109,7 @@ Load the data so that you get a data frame of **120** columns. The first one sho
 
 <details>
   <summary>Answer</summary>
+
   ```R
   ucec  <- readr::read_tsv(file='TCGA.UCEC.maf', skip = 5)
   ```
@@ -130,10 +131,14 @@ Filter (remove) variants whose tumoral depth or normal depth was below 30. Start
 
 <details>
   <summary>Answer</summary>
+
+```R
 low_t_depth <- ucec$t_depth >= 30
 low_n_depth <- ucec$n_depth >= 30
 
 ucec <- ucec[low_t_depth & low_n_depth, ]
+```
+
 </details>
 
 
@@ -156,10 +161,14 @@ will return **a boolean** vector of length 3, which is the same as animals. The 
 
 <details>
   <summary>Answer</summary>
+
+  ```R
 unique(ucec$Variant_Classification)
 non_relevant <- c('Silent', 'Intron', "5'Flank", "3'UTR", "5'UTR")
 
 ucec_base <- ucec[!ucec$Variant_Classification %in% non_relevant,]
+```
+
 </details>
 
 ## Filtering, the tidy way
@@ -206,9 +215,13 @@ Do you remember our *today_courses* data frame. All of the functions we applied:
 
 <details>
   <summary>Answer</summary>
+
+```R
 tidy_courses <- today_courses %>%
                 separate(col = subjects, into = c('subject_1', 'subject_2', 'subject_3'), sep = '-') %>%
                 gather(order, subjects, subject_1:subject_3)
+  ```    
+
 </details>
 
 ## Group-wise operations with group_by
@@ -258,11 +271,13 @@ For each **tumor sample**, report:
 
 <details>
   <summary>Answer</summary>
+
   ```R
 patients_standard_deviation  <- depth_by_sample <- ucec %>%
                                 group_by(Tumor_Sample_Barcode) %>%
                                 summarise(length(unique(Variant_Classification)), sd(c(n_depth)), sd(t_depth))
   ```
+  
 </details>
 
 
